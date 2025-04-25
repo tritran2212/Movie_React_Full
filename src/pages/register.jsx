@@ -97,7 +97,7 @@ export default function Register (){
                
                 ></Input>
                  <ErrorMessage
-                        message={formik.touched.taikhoan && formik.errors.taikhoan}
+                        mess={formik.touched.taikhoan && formik.errors.taikhoan}
                         />
                 </div>
                 <div className="mb-4">
@@ -108,7 +108,7 @@ export default function Register (){
                 required
                 className="mb-4"></Input>
                  <ErrorMessage
-                            message={formik.touched.password && formik.errors.password}
+                            mess={formik.touched.password && formik.errors.password}
                         />
                 </div>
                 
@@ -119,9 +119,9 @@ export default function Register (){
                 placeholder="Nhập Mã Nhóm"
                 required
                 ></Input>
-                 <ErrorMessage
+                 {/* <ErrorMessage
                             message={formik.touched.manhom && formik.errors.manhom}
-                        />
+                        /> */}
                </div>
                
 
@@ -132,7 +132,7 @@ export default function Register (){
                 required
                 ></Input>
                  <ErrorMessage
-                            message={formik.touched.name && formik.errors.name}
+                            mess={formik.touched.name && formik.errors.name}
                         />
                 </div> 
                
@@ -144,7 +144,7 @@ export default function Register (){
                 required
                 className="mb-4"></Input>
                  <ErrorMessage
-                            message={formik.touched.email && formik.errors.email}
+                            mess={formik.touched.email && formik.errors.email}
                         />
                </div>
               
@@ -156,7 +156,7 @@ export default function Register (){
                 required
                 className="mb-4"></Input>
                  <ErrorMessage
-                            message={formik.touched.phone && formik.errors.phone}
+                            messa={formik.touched.phone && formik.errors.phone}
                         />
                 </div>
 
