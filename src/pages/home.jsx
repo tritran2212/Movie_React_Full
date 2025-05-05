@@ -1,9 +1,11 @@
+
+import { ProductFeature1 } from "./home/product-feature1"
 export function home(){
 
     return (
 
         <>
-            <h1>home</h1>
+            <ProductFeature1/>
         </>
     )
 }

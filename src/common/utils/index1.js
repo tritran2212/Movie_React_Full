@@ -1,0 +1,1 @@
+export   {manageLocalStorage1} from  "./local-storage1"
