@@ -3,6 +3,8 @@
 import { useSelector } from "react-redux";
 import {Link} from "react-router";
 import { Avatar } from "../../../components/avatar/avatar";
+import {Menu} from "./menu"
+import { useNavigate } from "react-router";
 function LogoIcon(){
 
     return (
@@ -11,13 +13,17 @@ function LogoIcon(){
         </>
     )
 }
+
 export  function Header(){
+
+    
     // cách lấy dữ liệu người dùng  từ reducer trong redux store
     const user = useSelector(
         (store)=>{
             return store.userReducer.user;
         }
     )
+    const navigate = useNavigate();
     
     console.log("uerrr", user)
      
@@ -31,7 +37,9 @@ export  function Header(){
 
                 <div>
                     <ul className="flex gap-4 justify-end items-center text-blue-500">
-                        <li className="border-r-2 pr-3 text-decoration: underline"><a href="#" className="text-decoration: underline;">Trang Chủ</a></li>
+                        <li className="border-r-2 pr-3 text-decoration: underline"><a href="#" className="text-decoration: underline; "onClick={()=>{
+                                        navigate("/")
+                                       }}>Trang Chủ</a></li>
                         <li className="border-r-2 pr-3 text-decoration: underline" ><a href="#" >Liên Hệ </a></li>
                         <li className="border-r-2 pr-3 text-decoration: underline"><a href="#">Tin Tức </a></li>
                         <li  className="text-decoration: underline"><a href="#" >Ứng Dụng</a></li>
@@ -43,8 +51,24 @@ export  function Header(){
                 {
                     user!== null ?(
                         <div className="flex gap-2 items-center">
+
+                            <Menu
+                                list={[
+                                    {id:1,child:<button 
+                                       onClick={()=>{
+                                        navigate("/login")
+                                       }}
+                                        >Logout</button>}
+                                    ,{
+                                        id:2,child:
+                                        <Link to="/change-password">Change Password</Link>
+                                    }
+                                ]}
+                            >
                                 <p>Hello,{user.taiKhoan}</p>
                                 <Avatar>T</Avatar>
+                            </Menu>
+                                
                                
                         </div>
                     ):(<div>

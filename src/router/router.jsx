@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router" ;
 import { home } from "../pages/home";
-import {CardDetail} from "../pages/cardDetail";
 import { BaseTemplate } from "../templates_/base_/base.templates"
 ;
 import{lazy, Suspense} from "react";
 // lazy load công dụng khi nào gọi mới download về
 const  Login = lazy(()=>import("../pages/login"));
 const  Register = lazy(()=>import("../pages/register"));
-
+const CardDetail = lazy(()=>import ("../pages/cardDetail"))
+const  DatVe = lazy(()=>import ("../pages/datve"));
 
 export const router = createBrowserRouter([
 
@@ -19,10 +19,15 @@ export const router = createBrowserRouter([
                 Component:home,
             },
             {
-                path:"/card",
-                Component:CardDetail,
+                path:"/cardDetail/:maPhim",
+                element:<CardDetail/>
 
             },
+            {
+
+                path:"/datve/:maLichChieu",
+                element:<DatVe/>
+            }
             
         ]
     },
