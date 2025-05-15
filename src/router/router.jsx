@@ -8,7 +8,7 @@ const  Login = lazy(()=>import("../pages/login"));
 const  Register = lazy(()=>import("../pages/register"));
 const CardDetail = lazy(()=>import ("../pages/cardDetail"))
 const  DatVe = lazy(()=>import ("../pages/datve"));
-
+const  ListFilmAdmin= lazy(()=>import("../pages/Admin/listFilmAdmin"))
 export const router = createBrowserRouter([
 
     {
@@ -27,6 +27,10 @@ export const router = createBrowserRouter([
 
                 path:"/datve/:maLichChieu",
                 element:<DatVe/>
+            },
+            {
+                path:"/admin",
+                element:<ListFilmAdmin/>
             }
             
         ]

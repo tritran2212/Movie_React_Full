@@ -25,3 +25,20 @@ export function getQuanliDatVe(maLichChieu){
 
     return  axiosWithout1(`/api/QuanLyDatVe/LayDanhSachPhongVe?MaLichChieu=${maLichChieu}`);
 }
+
+export  function putQuanliThongTinNguoiDung(){
+
+    return  axiosWithout1(`/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung`)
+}
+
+export function addFilmAPI(data) {
+    return axiosWithout1.post("/api/QuanLyPhim/ThemPhimUploadHinh", data);
+}
+
+export function updateFilmAPI(data) {
+    return axiosWithout1.post("/api/QuanLyPhim/CapNhatPhimUpload", data);
+}
+
+export function deleteFilmAPI(maPhim) {
+    return axiosWithout1.delete(`/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`);
+}

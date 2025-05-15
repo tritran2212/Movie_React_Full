@@ -5,3 +5,14 @@ export function getProfieAPI1(){
         method:"post",
     })
 }
+
+export function putQuanliThongTinNguoiDung(data, token) {
+    return axiosWithout1(`/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung`, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json-patch+json"
+        },
+        data
+    });
+}

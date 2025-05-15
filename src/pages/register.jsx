@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { z } from "zod";
+import { useState } from "react";
 
 const RegisterSchema = z.object({
     taiKhoan: z.string().min(4, "Tài khoản phải có ít nhất 4 ký tự").nonempty("Tài khoản là bắt buộc"),
@@ -12,11 +13,11 @@ const RegisterSchema = z.object({
     maNhom: z.string().nonempty("Mã nhóm là bắt buộc"),
     hoTen: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự").nonempty("Họ tên là bắt buộc"),
 }).superRefine((val, ctx) => {
-    if (val.password && val.password.toLowerCase().includes("password")) {
+    if (val.matKhau && val.matKhau.toLowerCase().includes("password")) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Mật khẩu không được chứa từ 'password'",
-            path: ["password"],
+            path: ["matKhau"],
         });
     }
 });
@@ -31,6 +32,7 @@ export function ErrorMessage({ mess }) {
 
 export default function Register() {
     const navigate = useNavigate();
+    const [apiError, setApiError] = useState("");
 
     const formik = useFormik({
         initialValues: {
@@ -42,7 +44,7 @@ export default function Register() {
             hoTen: "",
         },
         onSubmit(values) {
-            console.log(values);
+            setApiError("");
             axios.post("http://movieapi.cyberlearn.vn/api/QuanLyNguoiDung/DangKy", {
                 taiKhoan: values.taiKhoan,
                 matKhau: values.matKhau,
@@ -51,15 +53,16 @@ export default function Register() {
                 maNhom: values.maNhom,
                 hoTen: values.hoTen,
             }).then((response) => {
-                console.log("registration successful", response.data);
                 navigate("/login");
             }).catch((error) => {
-                if (error.response) {
-                    console.log("Error response:", error.response.data);
+                if (error.response && error.response.data && error.response.data.content) {
+                    setApiError(error.response.data.content);
+                } else if (error.response && error.response.data && error.response.data.message) {
+                    setApiError(error.response.data.message);
                 } else if (error.request) {
-                    console.log("No response received:", error.request);
+                    setApiError("Không nhận được phản hồi từ máy chủ.");
                 } else {
-                    console.log("Error setting up request:", error.message);
+                    setApiError("Đã xảy ra lỗi không xác định.");
                 }
             });
         },
@@ -81,6 +84,7 @@ export default function Register() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
                 <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Đăng Ký</h1>
+                {apiError && <div className="text-red-600 text-center mb-4">{apiError}</div>}
                 <form onSubmit={formik.handleSubmit}>
                     <div className="mb-4">
                         <Input

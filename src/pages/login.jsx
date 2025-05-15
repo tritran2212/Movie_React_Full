@@ -6,9 +6,10 @@ import { z } from "zod";
 import { manageLocalStorage1 } from "../common/utils/local-storage1.js";
 import { KEY_ACCESS_TOKEN1 } from "../common/constanst/index.js";
 import { getProfieAPI1 } from "../service/user.service1.js";
-
-import {useDispatch}  from "react-redux";
-import {setUser} from "../store/user.slice1.jsx";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/user.slice1.jsx";
+import { useState } from "react";
+import { putQuanliThongTinNguoiDung } from "../service/user.product1.js";
 const LoginSchema = z.object({
     taiKhoan: z.string().min(4, "Tài khoản phải có ít nhất 4 ký tự").nonempty("Tài khoản là bắt buộc"),
     matKhau: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự").nonempty("Mật khẩu là bắt buộc"),
@@ -24,9 +25,8 @@ export function ErrorMessage({ mess }) {
 
 export default function Login() {
     const navigate = useNavigate();
-
-    const  dispatch = useDispatch();
-
+    const dispatch = useDispatch();
+    const [loginError, setLoginError] = useState("");
 
     const formik = useFormik({
         initialValues: {
@@ -34,34 +34,34 @@ export default function Login() {
             matKhau: "",
         },
         onSubmit(values) {
-            axios
-                .post("http://movieapi.cyberlearn.vn/api/QuanLyNguoiDung/DangNhap", {
-                    taiKhoan: values.taiKhoan,
-                    matKhau: values.matKhau,
-                })
-                .then((response) => {
-                 //   console.log("registration successful", response.data);
-                    navigate("/");
-                    // 1 luu token vào local storage 
-                manageLocalStorage1.set(KEY_ACCESS_TOKEN1,response.data.content.accessToken);
-                    // lưu token vào redux
-                getProfieAPI1().then((res)=>{
-                    console.log("thanh cong ", res.data)
-
-                    dispatch(setUser(res.data.content))
-                })
-                
-                // console.log("Token", response.data.content.accessToken); 
-                // console.log("Token", response.data.content); 
-                // console.log("Token", response.data); 
+            setLoginError("");
+            axios.post("http://movieapi.cyberlearn.vn/api/QuanLyNguoiDung/DangNhap", {
+                taiKhoan: values.taiKhoan,
+                matKhau: values.matKhau,
             })
+                .then((response) => {
+                    manageLocalStorage1.set(KEY_ACCESS_TOKEN1, response.data.content.accessToken);
+                    getProfieAPI1().then((res) => {
+                        dispatch(setUser(res.data.content));
+                        if (
+                            res.data.content.maLoaiNguoiDung?.toLowerCase() === "admin" ||
+                            res.data.content.maLoaiNguoiDung?.toLowerCase() === "quantri"
+                        ) {
+                            navigate("/admin");
+                        } else {
+                            navigate("/");
+                        }
+                    });
+                })
                 .catch((error) => {
-                    if (error.response) {
-                        console.log("Error response:", error.response.data);
+                    if (error.response && error.response.data && error.response.data.content) {
+                        setLoginError(error.response.data.content);
+                    } else if (error.response && error.response.data && error.response.data.message) {
+                        setLoginError(error.response.data.message);
                     } else if (error.request) {
-                        console.log("No response received:", error.request);
+                        setLoginError("Không nhận được phản hồi từ máy chủ.");
                     } else {
-                        console.log("Error setting up request:", error.message);
+                        setLoginError("Đã xảy ra lỗi không xác định.");
                     }
                 });
         },
@@ -83,6 +83,7 @@ export default function Login() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
                 <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">ĐĂNG NHẬP</h1>
+                {loginError && <div className="text-red-600 text-center mb-4">{loginError}</div>}
                 <form onSubmit={formik.handleSubmit}>
                     <div className="mb-4">
                         <Input
