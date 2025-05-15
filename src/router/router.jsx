@@ -9,6 +9,8 @@ const  Register = lazy(()=>import("../pages/register"));
 const CardDetail = lazy(()=>import ("../pages/cardDetail"))
 const  DatVe = lazy(()=>import ("../pages/datve"));
 const  ListFilmAdmin= lazy(()=>import("../pages/Admin/listFilmAdmin"))
+const  Profile = lazy(()=>import("../pages/Profile"))
+
 export const router = createBrowserRouter([
 
     {
@@ -31,7 +33,13 @@ export const router = createBrowserRouter([
             {
                 path:"/admin",
                 element:<ListFilmAdmin/>
+            },
+            {
+                path:"/profile",
+                element:<Profile/>
             }
+           
+          
             
         ]
     },
